@@ -1,0 +1,11 @@
+{
+    "host": "localhost",
+    "user": "admin", 
+    "password": "root",
+    "database": "annotation_graphs",
+    "RESOLVE_ENP": {
+        "url": "https://www.ebi.ac.uk/europepmc/annotations_api/annotationsByArticleIds?articleIds={articleId}&type=Gene_Proteins&subType=uniprot&format=JSON",
+        "params": "{articleId}",
+        "articleId": "MED:"
+    }
+}

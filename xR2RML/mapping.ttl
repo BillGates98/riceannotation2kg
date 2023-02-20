@@ -1,0 +1,164 @@
+@prefix xrr: <http://i3s.unice.fr/xr2rml#> .
+@prefix rr:  <http://www.w3.org/ns/r2rml#> .
+@prefix ex:  <http://example.com/> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:     <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix oa:     <http://www.w3.org/ns/oa#>.
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix dctypes:   <http://purl.org/dc/dcmitype/>.
+@prefix fabio:  <http://purl.org/spar/fabio/> .
+@prefix dct:    <http://purl.org/dc/terms/>.
+@prefix skos:	<http://www.w3.org/2004/02/skos/core#>.
+@prefix d2kab: <http://ns.inria.fr/d2kab/> .
+
+<#Denotation>
+    rr:logicalTable [ rr:sqlQuery "select * from denotations where normalized_entity != ''"; ];
+    rr:subjectMap [ 
+        rr:template "http://agrold.annotation.org/entities/{token}/key/{begin}-{end}/code";
+        rr:class oa:Annotation;
+    ];
+    # rr:predicateObjectMap [
+    #     rr:predicate oa:hasState;
+    #     rr:objectMap [ 
+    #         xrr:reference "type";
+    #         rr:termType rr:Literal;
+	# 		rr:datatype xsd:string;        
+    #     ];
+    # ];
+    rr:predicateObjectMap [
+        rr:predicate oa:exact;
+        rr:objectMap [ 
+            rr:template "{normalized_entity}";
+            rr:termType rr:IRI;
+			# rr:datatype xsd:string;
+        ];
+    ];
+    # rr:predicateObjectMap [
+    #     rr:predicate ex:index;
+    #     rr:objectMap [ xrr:reference "id"; ];
+    # ];
+    rr:predicateObjectMap [
+        rr:predicate oa:start;
+        rr:objectMap [ 
+            xrr:reference "begin";
+            rr:termType rr:Literal;
+			rr:datatype xsd:string;
+			# rr:datatype xsd:integer;
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate oa:end;
+        rr:objectMap [ 
+            xrr:reference "end";
+            rr:termType rr:Literal;
+			rr:datatype xsd:string;
+			# rr:datatype xsd:integer;
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate dct:abstract;
+        rr:objectMap [ 
+            xrr:reference "full_address";
+            rr:termType rr:IRI;
+			# rr:datatype xsd:string;
+			# rr:datatype xsd:integer;
+        ];
+    ].
+
+<#Article>
+    xrr:logicalSource [
+        rr:sqlQuery "select * from articles";
+    ];
+    rr:subjectMap [
+        rr:template "{sourceurl}";
+        rr:class fabio:ResearchPaper;
+    ];
+    rr:predicateObjectMap [
+        rr:predicate fabio:hasPubMedId;
+        rr:objectMap [
+            xrr:reference "sourceid";
+            rr:termType rr:Literal;
+			rr:datatype xsd:string;
+			# rr:datatype xsd:integer;
+        ];
+    ];
+    # rr:predicateObjectMap [
+    #     rr:predicate dct:title;
+    #     rr:objectMap [ 
+	# 		rr:template "http://ns.inria.fr/d2kab/article/{sourceid}#title";
+	# 	];
+    # ];
+	# rr:predicateObjectMap [
+    #     rr:predicate dct:abstract;
+    #     rr:objectMap [ 
+	# 		rr:template "http://ns.inria.fr/d2kab/article/{sourceid}#abstract";
+	# 	];
+    # ];
+    rr:predicateObjectMap [
+        rr:predicate ex:sourcedb;
+        rr:objectMap [ 
+            xrr:reference "sourcedb";
+            rr:termType rr:Literal;
+			rr:datatype xsd:string;
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate rdf:value;
+        rr:objectMap [ 
+            xrr:reference "text";
+            rr:termType rr:Literal;
+			rr:datatype xsd:string;
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate ex:project;
+        rr:objectMap [ 
+            xrr:reference "project";
+            rr:termType rr:Literal;
+			rr:datatype xsd:string;
+        ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate oa:hasTarget;
+        rr:objectMap [
+            rr:parentTriplesMap <#Denotation>;
+            rr:joinCondition [
+                rr:child "sourceid";
+                rr:parent "sourceid";
+            ];
+        ];
+    ].
+
+
+<#Entity>
+    rr:logicalTable [ rr:sqlQuery "select * from entities where normalized_entity != ''"; ];
+    rr:subjectMap [ 
+        rr:template "{normalized_entity}";
+        # rr:class d2kab:Gene;
+    ];
+    rr:predicateObjectMap [
+        rr:predicate rr:class;
+        rr:objectMap [ 
+            xrr:reference "type";
+            rr:termType rr:Literal;
+			rr:datatype xsd:string;      
+        ];
+    ];
+    # rr:predicateObjectMap [
+    #     rr:predicate rdf:value;
+    #     rr:objectMap [ 
+    #         xrr:reference "name";
+    #         rr:termType rr:Literal;
+	# 		rr:datatype xsd:string;        
+    #     ];
+    # ];
+    rr:predicateObjectMap [
+		rr:predicate skos:prefLabel;
+		rr:objectMap [
+			rr:template "{name}";
+			rr:termType rr:Literal;
+			rr:datatype xsd:string;
+		];
+	].
